@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>BOSS Core Engine Demo</title>
+		<link rel="preload" href="css/fonts/roboto.woff2" as="font" type="font/woff2" crossorigin>
+		<link rel="stylesheet" href="css/boss.min.css">
+		<style>
+			:root {
+				--demo-hero-bg: oklch(96% 0.025 250);
+				--demo-panel-bg: oklch(100% 0 0 / 0.88);
+				--demo-muted-bg: oklch(94% 0.012 250);
+				--demo-shadow: 0 1rem 3rem oklch(24% 0.04 250 / 0.12);
+			}
+
+			body {
+				background:
+					radial-gradient(circle at 15% 10%, oklch(88% 0.075 250), transparent 28rem),
+					linear-gradient(180deg, var(--demo-hero-bg), var(--boss-color-bg) 34rem);
+			}
+
+			.demo-header,
+			.demo-footer {
+				inline-size: min(100% - 2rem, 72rem);
+				margin-inline: auto;
+			}
+
+			.demo-header {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: var(--boss-space-md);
+				padding-block: var(--boss-space-lg);
+			}
+
+			.demo-brand {
+				display: inline-flex;
+				align-items: center;
+				gap: var(--boss-space-xs);
+				font-weight: var(--boss-weight-bold);
+				color: var(--boss-color-text);
+				text-decoration: none;
+			}
+
+			.demo-mark {
+				display: grid;
+				place-items: center;
+				inline-size: 2rem;
+				block-size: 2rem;
+				border-radius: var(--boss-radius-sm);
+				background: var(--boss-color-accent);
+				color: var(--boss-color-accent-contrast);
+			}
+
+			.demo-nav {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: flex-end;
+				gap: var(--boss-space-sm);
+			}
+
+			.demo-nav a {
+				padding: 0.35em 0.65em;
+				border-radius: var(--boss-radius-pill);
+				background: oklch(100% 0 0 / 0.58);
+				text-decoration: none;
+			}
+
+			.demo-hero {
+				display: grid;
+				grid-template-columns: minmax(0, 1.35fr) minmax(16rem, 0.65fr);
+				gap: var(--boss-space-xl);
+				align-items: center;
+				padding-block: var(--boss-space-2xl);
+			}
+
+			.demo-eyebrow {
+				margin-block-end: var(--boss-space-sm);
+				color: var(--boss-color-muted);
+				font-size: var(--boss-font-size-sm);
+				font-weight: var(--boss-weight-bold);
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+			}
+
+			.demo-lede {
+				max-inline-size: 62ch;
+				margin-block-start: var(--boss-space-md);
+				color: var(--boss-color-muted);
+				font-size: var(--boss-font-size-lg);
+			}
+
+			.demo-actions {
+				display: flex;
+				flex-wrap: wrap;
+				gap: var(--boss-space-sm);
+				margin-block-start: var(--boss-space-lg);
+			}
+
+			.demo-link-button {
+				display: inline-flex;
+				align-items: center;
+				min-block-size: 2.5rem;
+				padding: 0.55em 1em;
+				border: var(--boss-border);
+				border-radius: var(--boss-radius-sm);
+				background: var(--boss-color-surface);
+				text-decoration: none;
+				font-weight: var(--boss-weight-bold);
+			}
+
+			.demo-stat-panel {
+				display: grid;
+				gap: var(--boss-space-md);
+				padding: var(--boss-space-lg);
+				border: var(--boss-border);
+				border-radius: var(--boss-radius-md);
+				background: var(--demo-panel-bg);
+				box-shadow: var(--demo-shadow);
+			}
+
+			.demo-stat {
+				display: grid;
+				gap: var(--boss-space-2xs);
+			}
+
+			.demo-stat strong {
+				font-size: var(--boss-font-size-xl);
+			}
+
+			.demo-section {
+				padding-block: var(--boss-space-xl);
+				border-block-start: var(--boss-border);
+			}
+
+			.demo-section-header {
+				display: grid;
+				gap: var(--boss-space-xs);
+				margin-block-end: var(--boss-space-lg);
+			}
+
+			.demo-section-header p {
+				color: var(--boss-color-muted);
+			}
+
+			.demo-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+				gap: var(--boss-space-md);
+			}
+
+			.demo-card {
+				display: grid;
+				align-content: start;
+				gap: var(--boss-space-sm);
+				padding: var(--boss-space-md);
+				border: var(--boss-border);
+				border-radius: var(--boss-radius-md);
+				background: var(--boss-color-surface);
+			}
+
+			.demo-card-muted {
+				background: var(--demo-muted-bg);
+			}
+
+			.demo-swatch-row {
+				display: flex;
+				flex-wrap: wrap;
+				gap: var(--boss-space-xs);
+			}
+
+			.demo-swatch {
+				inline-size: 3rem;
+				block-size: 3rem;
+				border: var(--boss-border);
+				border-radius: var(--boss-radius-sm);
+			}
+
+			.demo-swatch:nth-child(1) {
+				background: var(--boss-color-accent);
+			}
+
+			.demo-swatch:nth-child(2) {
+				background: var(--boss-color-mark);
+			}
+
+			.demo-swatch:nth-child(3) {
+				background: var(--boss-color-code-bg);
+			}
+
+			.demo-form-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+				gap: var(--boss-space-md);
+			}
+
+			.demo-control-group {
+				display: grid;
+				gap: var(--boss-space-xs);
+			}
+
+			.demo-button-row {
+				display: flex;
+				flex-wrap: wrap;
+				gap: var(--boss-space-sm);
+			}
+
+			.demo-media-frame {
+				display: grid;
+				place-items: center;
+				min-block-size: 12rem;
+				border-radius: var(--boss-radius-md);
+				background:
+					linear-gradient(135deg, oklch(92% 0.06 250), oklch(96% 0.04 160));
+			}
+
+			.demo-footer {
+				padding-block: var(--boss-space-xl);
+				color: var(--boss-color-muted);
+			}
+
+			@media (max-width: 48rem) {
+				.demo-header,
+				.demo-hero {
+					display: grid;
+				}
+
+				.demo-nav {
+					justify-content: flex-start;
+				}
+
+				.demo-hero {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<header class="demo-header">
+			<a class="demo-brand" href="#top" aria-label="BOSS home">
+				<span class="demo-mark">B</span>
+				<span>BOSS </span>
+			</a>
+			<nav class="demo-nav" aria-label="Demo sections">
+				<a href="#architecture">Architecture</a>
+				<a href="#typography">Typography</a>
+				<a href="#forms">Forms</a>
+				<a href="#media">Media</a>
+				<a href="#interactive">Interactive</a>
+			</nav>
+		</header>
+
+		<main id="top">
+			<section class="demo-hero" aria-labelledby="hero-title">
+				<div>
+					<p class="demo-eyebrow">BOSS - Best Optimal Style Settings</p>
+					<h1 id="hero-title">BOSS gives every project a clean, modern CSS foundation.</h1>
+					<p class="demo-lede">This page demonstrates reset, normalize, tokens, typography, forms, media, tables, accessibility states, print behavior, and native interactive elements without turning BOSS into a UI framework.</p>
+					<p class="demo-eyebrow">CSS Core Engine v-1.0</p>
+					<div class="demo-actions">
+						<a class="demo-link-button" href="#architecture">Explore the layers</a>
+						<a class="demo-link-button" href="#forms">Test form states</a>
+					</div>
+				</div>
+				<aside class="demo-stat-panel" aria-label="BOSS highlights">
+					<div class="demo-stat">
+						<strong>12 layers</strong>
+						<span>Predictable cascade architecture.</span>
+					</div>
+					<div class="demo-stat">
+						<strong>OKLCH</strong>
+						<span>Modern perceptual color tokens.</span>
+					</div>
+					<div class="demo-stat">
+						<strong>Native first</strong>
+						<span>No component framework assumptions.</span>
+					</div>
+				</aside>
+			</section>
+
+			<section id="architecture" class="demo-section">
+				<div class="demo-section-header">
+					<h2>Architecture</h2>
+					<p>BOSS separates foundation concerns into cascade layers so projects can override the engine intentionally.</p>
+				</div>
+				<div class="demo-grid">
+					<article class="demo-card">
+						<h3>Layer order</h3>
+						<pre><code>@layer reset, normalize, tokens, base,
+typography, forms, media, tables,
+a11y, theme, print, legacy;</code></pre>
+					</article>
+					<article class="demo-card">
+						<h3>Design tokens</h3>
+						<p>Tokens use the <code>--boss-*</code> namespace for colors, typography, spacing, radii, borders, focus, motion, and z-index values.</p>
+						<div class="demo-swatch-row" aria-label="Token color samples">
+							<span class="demo-swatch"></span>
+							<span class="demo-swatch"></span>
+							<span class="demo-swatch"></span>
+						</div>
+					</article>
+					<article class="demo-card">
+						<h3>Foundation only</h3>
+						<p>BOSS styles HTML elements and core browser behavior. Application components, layout systems, and brand UI remain yours.</p>
+					</article>
+				</div>
+			</section>
+
+			<section id="typography" class="demo-section">
+				<div class="demo-section-header">
+					<h2>Typography</h2>
+					<p>Headings, paragraphs, inline semantics, quotations, code, and lists should be readable out of the box.</p>
+				</div>
+				<div class="demo-grid">
+					<article class="demo-card">
+						<h1>Heading 1</h1>
+						<h2>Heading 2</h2>
+						<h3>Heading 3</h3>
+						<h4>Heading 4</h4>
+						<h5>Heading 5</h5>
+						<h6>Heading 6</h6>
+					</article>
+					<article class="demo-card">
+						<h3>Inline semantics</h3>
+						<p>A paragraph with a <a href="#typography">text link</a>, <strong>strong importance</strong>, <em>emphasis</em>, <b>bold text</b>, <i>alternate voice</i>, <small>small print</small>, <mark>highlighted text</mark>, an <abbr title="Application Programming Interface">API</abbr>, a <dfn>defined term</dfn>, and a date: <time datetime="2026-04-28">April 28, 2026</time>.</p>
+						<p><q>Short inline quotation</q>, <cite>source title</cite>, <del>removed copy</del>, and <ins>inserted copy</ins>.</p>
+						<p>Formula and wrapping: H<sub>2</sub>O, E = mc<sup>2</sup>, line break<br>and a long<wbr>breakable<wbr>identifier.</p>
+					</article>
+					<article class="demo-card">
+						<h3>Code and quote</h3>
+						<p>Inline code: <code>const engine = "BOSS";</code>, keyboard input <kbd>Ctrl</kbd> + <kbd>S</kbd>, sample output <samp>ready</samp>, and variable <var>x</var>.</p>
+						<pre><code>function createFoundation(name) {
+	return `${name} is ready`;
+}</code></pre>
+						<blockquote cite="https://example.com">
+							<p>A foundation layer should improve browser consistency without taking ownership of product design.</p>
+						</blockquote>
+						<address>Contact: <a href="mailto:qa@example.com">qa@example.com</a></address>
+					</article>
+				</div>
+			</section>
+
+			<section class="demo-section">
+				<div class="demo-section-header">
+					<h2>Lists</h2>
+					<p>Common list patterns keep native structure and spacing.</p>
+				</div>
+				<div class="demo-grid">
+					<article class="demo-card">
+						<h3>Unordered list</h3>
+						<ul>
+							<li>Controlled reset</li>
+							<li>Nested list support
+								<ul>
+									<li>Nested item</li>
+								</ul>
+							</li>
+							<li>Readable rhythm</li>
+						</ul>
+					</article>
+					<article class="demo-card">
+						<h3>Ordered list</h3>
+						<ol>
+							<li>Load BOSS.</li>
+							<li>Add project styles.</li>
+							<li>Build components on top.</li>
+						</ol>
+					</article>
+					<article class="demo-card">
+						<h3>Description list</h3>
+						<dl>
+							<dt>Reset</dt>
+							<dd>Removes inconsistent browser spacing safely.</dd>
+							<dt>Normalize</dt>
+							<dd>Unifies browser behavior for modern elements.</dd>
+						</dl>
+					</article>
+				</div>
+			</section>
+
+			<section id="media" class="demo-section">
+				<div class="demo-section-header">
+					<h2>Media</h2>
+					<p>Images, SVG, video, audio, canvas, and iframes remain responsive without external demo assets.</p>
+				</div>
+				<div class="demo-grid">
+					<figure class="demo-card">
+						<picture>
+							<source srcset="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 480 320'%3E%3Crect width='480' height='320' fill='oklch(92%25 0.06 250)'/%3E%3Ccircle cx='240' cy='160' r='70' fill='oklch(54%25 0.18 255)'/%3E%3C/svg%3E" type="image/svg+xml">
+							<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 480 320'%3E%3Crect width='480' height='320' fill='oklch(92%25 0.06 250)'/%3E%3Ccircle cx='240' cy='160' r='70' fill='oklch(54%25 0.18 255)'/%3E%3C/svg%3E" alt="Abstract test image">
+						</picture>
+						<figcaption>Responsive picture, source, image, figure, and figcaption.</figcaption>
+					</figure>
+					<figure class="demo-card">
+						<div class="demo-media-frame">
+							<svg viewBox="0 0 160 90" role="img" aria-label="Abstract SVG sample">
+								<rect width="160" height="90" rx="8" fill="oklch(92% 0.06 250)"></rect>
+								<circle cx="80" cy="45" r="24" fill="oklch(54% 0.18 255)"></circle>
+							</svg>
+						</div>
+						<figcaption>Inline SVG with current media defaults.</figcaption>
+					</figure>
+					<article class="demo-card">
+						<h3>Video, audio, and canvas</h3>
+						<video controls poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 360'%3E%3Crect width='640' height='360' fill='oklch(94%25 0.01 255)'/%3E%3Cpath d='M280 220V140l80 40z' fill='oklch(54%25 0.18 255)'/%3E%3C/svg%3E">
+							<source src="data:video/mp4," type="video/mp4">
+							<track kind="captions" src="data:text/vtt,WEBVTT%0A%0A00:00.000%20--%3E%2000:01.000%0ABOSS.css%20QA" srclang="en" label="English">
+						</video>
+						<audio controls src="data:audio/wav,"></audio>
+						<canvas width="320" height="120">Canvas is not available.</canvas>
+					</article>
+				</div>
+			</section>
+
+			<section id="forms" class="demo-section">
+				<div class="demo-section-header">
+					<h2>Forms</h2>
+					<p>Controls share a consistent baseline while preserving native behavior, validation, focus, disabled, and read-only states.</p>
+				</div>
+				<form action="#" method="post">
+					<fieldset>
+						<legend>Text controls</legend>
+						<div class="demo-form-grid">
+							<div class="demo-control-group">
+								<label for="text">Text</label>
+								<input id="text" name="text" type="text" placeholder="Plain text">
+							</div>
+							<div class="demo-control-group">
+								<label for="email">Email</label>
+								<input id="email" name="email" type="email" placeholder="mail@example.com" required>
+							</div>
+							<div class="demo-control-group">
+								<label for="password">Password</label>
+								<input id="password" name="password" type="password" placeholder="Password">
+							</div>
+							<div class="demo-control-group">
+								<label for="search">Search</label>
+								<input id="search" name="search" type="search" placeholder="Search">
+							</div>
+							<div class="demo-control-group">
+								<label for="url">URL</label>
+								<input id="url" name="url" type="url" placeholder="https://example.com">
+							</div>
+							<div class="demo-control-group">
+								<label for="tel">Tel</label>
+								<input id="tel" name="tel" type="tel" placeholder="+1 234 567">
+							</div>
+						</div>
+						<label for="comment">Textarea</label>
+						<textarea id="comment" name="comment" placeholder="Write a comment"></textarea>
+					</fieldset>
+
+					<fieldset>
+						<legend>Value controls</legend>
+						<div class="demo-form-grid">
+							<div class="demo-control-group">
+								<label for="number">Number</label>
+								<input id="number" name="number" type="number" min="0" max="10" value="3">
+							</div>
+							<div class="demo-control-group">
+								<label for="range">Range</label>
+								<input id="range" name="range" type="range" min="0" max="100" value="40">
+							</div>
+							<div class="demo-control-group">
+								<label for="color">Color</label>
+								<input id="color" name="color" type="color" value="#3366ff">
+							</div>
+							<div class="demo-control-group">
+								<label for="date">Date</label>
+								<input id="date" name="date" type="date">
+							</div>
+							<div class="demo-control-group">
+								<label for="datetime">Datetime local</label>
+								<input id="datetime" name="datetime" type="datetime-local">
+							</div>
+							<div class="demo-control-group">
+								<label for="month">Month</label>
+								<input id="month" name="month" type="month">
+							</div>
+							<div class="demo-control-group">
+								<label for="time">Time</label>
+								<input id="time" name="time" type="time">
+							</div>
+							<div class="demo-control-group">
+								<label for="week">Week</label>
+								<input id="week" name="week" type="week">
+							</div>
+						</div>
+					</fieldset>
+
+					<fieldset>
+						<legend>Choice controls</legend>
+						<label><input type="checkbox" name="check" checked> Checkbox</label>
+						<label><input type="radio" name="radio" checked> Radio A</label>
+						<label><input type="radio" name="radio"> Radio B</label>
+						<label for="file">File</label>
+						<input id="file" name="file" type="file">
+						<label for="select">Select</label>
+						<select id="select" name="select">
+							<optgroup label="Group A">
+								<option>Option 1</option>
+								<option>Option 2</option>
+							</optgroup>
+						</select>
+						<label for="browser">Datalist</label>
+						<input id="browser" name="browser" list="browsers">
+						<datalist id="browsers">
+							<option value="Chromium"></option>
+							<option value="Firefox"></option>
+							<option value="Safari"></option>
+						</datalist>
+						<output name="result">42</output>
+						<progress value="60" max="100">60%</progress>
+						<meter value="0.7">70%</meter>
+					</fieldset>
+
+					<fieldset>
+						<legend>Button and state controls</legend>
+						<input type="hidden" name="hidden" value="ok">
+						<div class="demo-button-row">
+							<button type="button">Button</button>
+							<input type="button" value="Input button">
+							<input type="submit" value="Submit">
+							<input type="reset" value="Reset">
+							<button type="button" disabled>Disabled</button>
+						</div>
+						<label for="readonly">Read-only input</label>
+						<input id="readonly" type="text" value="Read-only value" readonly>
+					</fieldset>
+				</form>
+			</section>
+
+			<section class="demo-section">
+				<div class="demo-section-header">
+					<h2>Tables</h2>
+					<p>Tables use a minimal readable style while preserving semantic structure.</p>
+				</div>
+				<table>
+					<caption>Table, caption, colgroup, thead, tbody, tfoot, tr, th, and td.</caption>
+					<colgroup>
+						<col>
+						<col span="2">
+					</colgroup>
+					<thead>
+						<tr>
+							<th scope="col">Metric</th>
+							<th scope="col">A</th>
+							<th scope="col">B</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th scope="row">Size</th>
+							<td>1 rem</td>
+							<td>1.5 rem</td>
+						</tr>
+						<tr>
+							<th scope="row">Color</th>
+							<td>oklch</td>
+							<td>oklch</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<th scope="row">Result</th>
+							<td colspan="2">Readable baseline table styling</td>
+						</tr>
+					</tfoot>
+				</table>
+			</section>
+
+			<section id="interactive" class="demo-section">
+				<div class="demo-section-header">
+					<h2>Interactive elements</h2>
+					<p>Native details, dialog, and popover remain usable without a component system.</p>
+				</div>
+				<details>
+					<summary>Details and summary</summary>
+					<p>This disclosure widget should keep native keyboard and pointer behavior.</p>
+				</details>
+
+				<div class="demo-grid">
+					<article class="demo-card">
+						<h3>Dialog</h3>
+						<button type="button" onclick="document.querySelector('#qa-dialog').showModal()">Open dialog</button>
+						<dialog id="qa-dialog">
+							<h4>Dialog</h4>
+							<p>A native modal dialog styled by the foundation layer.</p>
+							<form method="dialog">
+								<button>Close</button>
+							</form>
+						</dialog>
+					</article>
+					<article class="demo-card">
+						<h3>Popover</h3>
+						<button type="button" popovertarget="qa-popover">Open popover</button>
+						<div id="qa-popover" popover>
+							<p>A native popover element.</p>
+						</div>
+					</article>
+				</div>
+			</section>
+
+			<section class="demo-section">
+				<div class="demo-section-header">
+					<h2>Embed and utility elements</h2>
+					<p>Service elements are included for coverage and regression checks.</p>
+				</div>
+				<aside class="demo-card demo-card-muted">
+					<p>Aside content represents secondary information related to the current section.</p>
+				</aside>
+				<iframe src="about:blank" title="Blank iframe"></iframe>
+				<template id="qa-template">
+					<p>Template content is not rendered directly.</p>
+				</template>
+				<div>
+					<slot name="demo">Fallback slot content</slot>
+				</div>
+				<noscript>JavaScript is disabled, so this noscript content is visible.</noscript>
+			</section>
+		</main>
+
+		<footer class="demo-footer">
+			<p><small>BOSS Core Engine QA playground.</small></p>
+		</footer>
+	</body>
+</html>
